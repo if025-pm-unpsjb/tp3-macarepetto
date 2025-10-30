@@ -204,8 +204,6 @@ void prvTask( void *pvParameters )
 
         prvPrintString( cMessage );
 
-        vTaskDelayUntil( &pxPreviousWakeTime, task->period );
-
 		uxReleaseCount += 1;
 	}
 

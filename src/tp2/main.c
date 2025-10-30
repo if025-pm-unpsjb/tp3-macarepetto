@@ -11,12 +11,11 @@
 /* FreeRTOS */
 #include "FreeRTOS.h"
 #include "task.h"
-
-/* Standard includes. */
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 
+#include "../tp2/sistemas.h"
 /* Hardware library includes. */
 #include "hw_memmap.h"
 #include "hw_types.h"
@@ -42,6 +41,9 @@
 #define mainFULL_SCALE                      ( 15 )
 #define ulSSI_FREQUENCY                     ( 3500000UL )
 #define tiempoARestar						( 100 )
+
+/* Seleccionador de Sistema */
+#define SISTEMA			1
 
 /* Tasks periods. */
 #define TASK1_PERIOD 	3000
@@ -124,13 +126,57 @@ int main( void )
     vOLEDStringDraw( cMessage, 0, 0, mainFULL_SCALE );
 
     /* Print "Start!" to the UART. */
-    prvPrintString("Start!\n\r");
+    prvPrintString("Inicio TP3\n\r");
+
+
+    /*----------------------------------------------
+     * Selección del sistema a ejecutar
+     *----------------------------------------------*/
+    const Tarea *tareas;
+    int cantidad;
+
+	#if SISTEMA == 1
+    	tareas = sistema1;
+    	cantidad = SISTEMA1_TAREAS;
+	#elif SISTEMA == 2
+    	tareas = sistema2;
+    	cantidad = SISTEMA2_TAREAS;
+	#elif SISTEMA == 3
+    	tareas = sistema3;
+    	cantidad = SISTEMA3_TAREAS;
+	#elif SISTEMA == 4
+    	tareas = sistema4;
+    	cantidad = SISTEMA4_TAREAS;
+	#elif SISTEMA == 5
+    	tareas = sistema5;
+    	cantidad = SISTEMA5_TAREAS;
+	#elif SISTEMA == 6
+    	tareas = sistema6;
+    	cantidad = SISTEMA6_TAREAS;
+	#elif SISTEMA == 7
+    	tareas = sistema7;
+    	cantidad = SISTEMA7_TAREAS;
+	#elif SISTEMA == 8
+    	tareas = sistema8;
+    	cantidad = SISTEMA8_TAREAS;
+	#elif SISTEMA == 9
+    	tareas = sistema9;
+    	cantidad = SISTEMA9_TAREAS;
+	#elif SISTEMA == 10
+		tareas = sistema10;
+		cantidad = SISTEMA10_TAREAS;
+	#else
+	#error "SISTEMA no definido"
+	#endif
 
     /* Creates the periodic tasks. */
-    xTaskCreate( prvTask, "Tarea 1", configMINIMAL_STACK_SIZE + 50, (void*) &task1, configMAX_PRIORITIES - 1, NULL );
-    xTaskCreate( prvTask, "Tarea 2", configMINIMAL_STACK_SIZE + 50, (void*) &task2, configMAX_PRIORITIES - 2, NULL );
-    xTaskCreate( prvTask, "Tarea 3", configMINIMAL_STACK_SIZE + 50, (void*) &task3, configMAX_PRIORITIES - 3, NULL );
-
+	for (int i = 0; i < cantidad; i++) {
+	    char nombre[4];
+	    sprintf(nombre, "T%d", i + 1);
+	    xTaskCreate(prvTask, nombre, configMINIMAL_STACK_SIZE + 50,
+	               (void *)&tareas[i],
+	               (configMAX_PRIORITIES - 1) - i, NULL);
+	}
     vTraceEnable( TRC_START );
 
     /* Launch the scheduler. */
@@ -243,4 +289,3 @@ char* _sbrk_r (struct _reent *r, int incr)
 int __error__(char *pcFilename, unsigned long ulLine) {
     return 0;
 }
-
