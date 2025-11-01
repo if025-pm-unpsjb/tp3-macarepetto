@@ -333,7 +333,7 @@ void crearSemaforo()
 
 {
     /* Intento de crear el semáforo. */
-    xSemaphore = xSemaphoreCreateBinary();
+    xSemaphore = xSemaphoreCreateMutex();
 
     if (xSemaphore == NULL) {
         prvPrintString("Error creando semaforo\n\r");

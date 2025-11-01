@@ -1,0 +1,1 @@
+ ~/Documentos/SETR/tools/xpack-qemu-arm-9.2.4-1/bin/qemu-system-arm -kernel Documentos/SETR/repos/tp3-macarepetto/build/build.elf -S -s -machine lm3s6965evb -nographic

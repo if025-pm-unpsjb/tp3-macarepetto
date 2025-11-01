@@ -1,10 +1,11 @@
 #ifndef SISTEMAS_H
 #define SISTEMAS_H
+#include "FreeRTOS.h"
 
 typedef struct {
-    TickType_t C;
-    TickType_t T;
-    TickType_t D;
+    TickType_t wcet;
+    TickType_t period;
+    TickType_t deadline;
 } Tarea;
 
 

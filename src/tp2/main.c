@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-
 #include "../tp2/sistemas.h"
 /* Hardware library includes. */
 #include "hw_memmap.h"
@@ -43,17 +42,7 @@
 #define tiempoARestar						( 100 )
 
 /* Seleccionador de Sistema */
-#define SISTEMA			1
-
-/* Tasks periods. */
-#define TASK1_PERIOD 	3000
-#define TASK2_PERIOD 	4000
-#define TASK3_PERIOD 	6000
-
-/* Tasks WCETs. */
-#define TASK1_WCET		500
-#define TASK2_WCET		500
-#define TASK3_WCET		500
+#define SISTEMA			10
 
 /*-----------------------------------------------------------*/
 
@@ -85,19 +74,6 @@ void ( *vOLEDInit )( uint32_t ) = NULL;
 void ( *vOLEDStringDraw )( const char *, uint32_t, uint32_t, unsigned char ) = NULL;
 void ( *vOLEDImageDraw )( const unsigned char *, uint32_t, uint32_t, uint32_t, uint32_t ) = NULL;
 void ( *vOLEDClear )( void ) = NULL;
-
-/*-----------------------------------------------------------*/
-
-struct xTaskStruct {
-	TickType_t wcet;
-	TickType_t period;
-};
-
-typedef struct xTaskStruct xTask;
-
-xTask task1 = { TASK1_WCET, TASK1_PERIOD };
-xTask task2 = { TASK2_WCET, TASK2_PERIOD };
-xTask task3 = { TASK3_WCET, TASK3_PERIOD };
 
 /*************************************************************************
  * Main
@@ -236,7 +212,7 @@ void prvTask( void *pvParameters )
 	char cMessage[ mainMAX_MSG_LEN ];
 	unsigned int uxReleaseCount = 0;
 	TickType_t pxPreviousWakeTime = 0;
-	xTask *task = (xTask*) pvParameters;
+    const Tarea *task= (Tarea *)pvParameters;
 
 	for( ;; )
 	{
